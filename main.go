@@ -3,32 +3,35 @@ package main
 import (
 	"fmt"
 	"time"
+
+	"github.com/inancgumus/screen"
 )
 
 func main() {
-	now := time.Now()
+	screen.Clear()
 
-	hour := now.Hour()
-	minute := now.Minute()
-	second := now.Second()
-	period := "AM"
+	for {
+		screen.MoveTopLeft()
 
-	if hour > 12 {
-		hour = hour - 12
-		period = "PM"
+		now := time.Now()
+		hour, minute, second := now.Hour(), now.Minute(), now.Second()
+
+		clock := [...]placeholder{
+			digits[hour/10], digits[hour%10],
+			colon,
+			digits[minute/10], digits[minute%10],
+			colon,
+			digits[second/10], digits[second%10],
+		}
+
+		for i := 0; i < 5; i++ {
+			for _, digit := range clock {
+				fmt.Print(digit[i], " ")
+			}
+			fmt.Println()
+		}
+		fmt.Println()
+
+		time.Sleep(time.Second)
 	}
-
-	month := now.Month()
-	day := now.Day()
-	year := now.Year()
-
-	fmt.Printf("%d/%d/%d\t%d:%02d:%02d %s\n",
-		month,
-		day,
-		year,
-		hour,
-		minute,
-		second,
-		period,
-	)
 }
